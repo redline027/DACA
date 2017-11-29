@@ -1,6 +1,7 @@
 import numpy as np
 import h5py
 import math
+import cv2
 import time
 import feature_projection
 
@@ -22,8 +23,11 @@ def color_tracker(params):
     video_path = params.video_path
     img_files = params.img_files
     #TODO: check here floor
-    pos = params.init_pos
-    target_sz = params.wsize
+    pos = np.empty(2)
+    target_sz = np.empty(2)
+    for i in range(2):
+        pos[i] = math.floor(params.init_pos[i])
+        target_sz[i] = math.floor(params.wsize[i])
 
     visualization = params.visualization
 
@@ -46,16 +50,20 @@ def color_tracker(params):
 
     # desired output (gaussian shaped), bandwidth proportional to target size
     output_sigma = math.sqrt(np.prod(target_sz)) * output_sigma_factor;
-    # TODO: research how it works
-    #rs, cs = np.meshgrid([1:sz(1)) - floor(sz(1)/2), (1:sz(2)) - floor(sz(2)/2]);
-    #x.^2 = np.power(x,2)
-    #y = exp(-0.5 / output_sigma^2 * (rs.^2 + cs.^2));
-    #fft2(y): np.fft.fft2(y)
-    #single(a): a = a.astype('float32')
-    #yf = single(fft2(y));
+    a = np.arange(1, sz[0] + 1) - math.floor(sz[0]/2.0)
+    b = np.arange(1, sz[1] + 1) - math.floor(sz[1]/2.0)
+    rs, cs = np.meshgrid(a, b)
+    rs = rs.T
+    cs = cs.T
+    a = np.power(rs, 2) + np.power(cs, 2)
+    y = np.exp(-0.5 / output_sigma**2 * a)
+    a = np.fft.fft2(y)
+    yf = a.astype('complex')
 
     # store pre-computed cosine window
-    cos_window = np.dot(np.hanning(sz[0]), np.transpose(np.hanning(sz[1])))
+    a = np.array(np.hanning(sz[0]))[np.newaxis]
+    b = np.array(np.hanning(sz[1]))[np.newaxis]
+    cos_window = np.dot(a.T, b)
     cos_window = cos_window.astype('float32')
 
     # to calculate precision

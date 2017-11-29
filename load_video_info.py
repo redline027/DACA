@@ -33,8 +33,9 @@ def load_video_info(base_path, video):
     target_sz = [ground_truth[0,3], ground_truth[0,2]]
     pos = [ground_truth[0,1], ground_truth[0,0]]
 
-    #TODO: ground_truth - magic
-    #ground_truth = [ground_truth(:,[2,1]) + (ground_truth(:,[4,3]) - 1) / 2 , ground_truth(:,[4,3])];
+    a = ground_truth[:, [1, 0]]
+    b = (ground_truth[:,[3,2]] - 1) / 2
+    ground_truth = np.concatenate((a + b, ground_truth[:,[3,2]]), axis = 1)
 
     video_path = video_path + 'imgs/'
     # TODO: check; not only jpg;

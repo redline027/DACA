@@ -38,13 +38,13 @@ img_files, pos, target_sz, ground_truth, video_path = load_video_info.load_video
 
 params.init_pos = np.zeros(2)
 for i in range(2):
-    params.init_pos[i] = math.floor(pos[i]) + math.floor(target_sz[i]/2);
+    params.init_pos[i] = math.floor(pos[i]) + math.floor(target_sz[i]/2)
 params.wsize = np.zeros(2)
 for i in range(2):
-    params.wsize[i] = math.floor(target_sz[i]);
-params.img_files = img_files;
-params.video_path = video_path;
+    params.wsize[i] = math.floor(target_sz[i])
+params.img_files = img_files
+params.video_path = video_path
 
-positions, fps = color_tracker.color_tracker(params);
+positions, fps = color_tracker.color_tracker(params)
 
 print('Hi')
