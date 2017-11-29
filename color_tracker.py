@@ -1,6 +1,8 @@
 import numpy as np
 import h5py
 import math
+import time
+import feature_projection
 
 def color_tracker(params):
 
@@ -55,6 +57,43 @@ def color_tracker(params):
     # store pre-computed cosine window
     cos_window = np.dot(np.hanning(sz[0]), np.transpose(np.hanning(sz[1])))
     cos_window = cos_window.astype('float32')
+
+    # to calculate precision
+    positions = np.zeros(len(img_files), 4)
+
+    # initialize the projection matrix
+    projection_matrix = []
+
+    # to calculate fps
+    time = 0
+
+    #???
+    z_npca = []
+    z_pca = []
+
+    for frame in range(2): #num_frames instead 1
+        # load image
+        # im = imread([video_path img_files{frame}]);
+
+        t = time.time()
+
+        if frame > 0
+            # compute the compressed learnt appearance
+            zp = feature_projection.feature_projection(z_npca, z_pca, projection_matrix, cos_window);
+
+            # extract the feature map of the local image patch
+            #[xo_npca, xo_pca] = get_subwindow(im, pos, sz, non_compressed_features, compressed_features, w2c);
+
+            # do the dimensionality reduction and windowing
+            #x = feature_projection(xo_npca, xo_pca, projection_matrix, cos_window);
+
+            # calculate the response of the classifier
+            #kf = fft2(dense_gauss_kernel(sigma, x, zp));
+            #response = real(ifft2(alphaf_num .* kf ./ alphaf_den));
+
+            # target location is at the maximum response
+            #[row, col] = find(response == max(response(:)), 1);
+            #pos = pos - floor(sz/2) + [row, col];
 
     positions = {}
     fps = {}
