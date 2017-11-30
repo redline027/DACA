@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import get_feature_map
 
 def get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c):
 
@@ -28,19 +29,20 @@ def get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c):
 
     #extract image
     im_patch = im[ys, xs, :]
-#------------------------------------------------------
+
     # compute non-pca feature map
-    # isempty = .size == 0 !!!!!!!!!!!!!
-    if ~isempty(non_pca_features):
-        out_npca = get_feature_map(im_patch, non_pca_features, w2c)
+    if non_pca_features.size != 0:
+        out_npca = get_feature_map.get_feature_map(im_patch, non_pca_features, w2c)
     else:
         out_npca = []
 
+    out_pca = {}
+    return out_npca, out_pca
+"""
     # compute pca feature map
     if ~isempty(pca_features):
-        temp_pca = get_feature_map(im_patch, pca_features, w2c)
+        temp_pca = get_feature_map.get_feature_map(im_patch, pca_features, w2c)
         out_pca = reshape(temp_pca, [prod(sz), size(temp_pca, 3)])
     else:
         out_pca = []
-
-    return out_npca, out_pca
+"""

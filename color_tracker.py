@@ -4,6 +4,7 @@ import math
 import cv2
 import time
 import feature_projection
+import get_subwindow
 
 def color_tracker(params):
 
@@ -67,30 +68,31 @@ def color_tracker(params):
     cos_window = cos_window.astype('float32')
 
     # to calculate precision
-    positions = np.zeros(len(img_files), 4)
+    positions = np.zeros((len(img_files), 4))
 
     # initialize the projection matrix
     projection_matrix = []
 
     # to calculate fps
-    time = 0
+    time_fps = 0
 
     #???
-    z_npca = []
-    z_pca = []
+    z_npca = np.zeros((0))
+    z_pca = np.zeros((0))
 
-    for frame in range(2): #num_frames instead 1
+    #num_frames instead 1
+    for frame in range(1):
         # load image
-        # im = imread([video_path img_files{frame}]);
+        im = cv2.imread('%s%s' % (video_path, img_files[frame]))
 
         t = time.time()
 
-        if frame > 0
+        if frame > 0:
             # compute the compressed learnt appearance
-            zp = feature_projection.feature_projection(z_npca, z_pca, projection_matrix, cos_window);
+            zp = feature_projection.feature_projection(z_npca, z_pca, projection_matrix, cos_window)
 
             # extract the feature map of the local image patch
-            #[xo_npca, xo_pca] = get_subwindow(im, pos, sz, non_compressed_features, compressed_features, w2c);
+            xo_npca, xo_pca = get_subwindow.get_subwindow(im, pos, sz, non_compressed_features, compressed_features, w2c)
 
             # do the dimensionality reduction and windowing
             #x = feature_projection(xo_npca, xo_pca, projection_matrix, cos_window);

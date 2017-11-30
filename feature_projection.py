@@ -8,7 +8,7 @@ def feature_projection(x_npca, x_pca, projection_matrix, cos_window):
     # the projection matrix and concatinates this with the non-PCA features.
     # The feature map is then windowed.
 
-    if len(x_pca) == 0:
+    if x_pca.size == 0:
         # if no PCA-features exist, only use non-PCA
         z = x_npca
     else:
@@ -22,7 +22,7 @@ def feature_projection(x_npca, x_pca, projection_matrix, cos_window):
         x_proj_pca = np.resize(x_proj_pca, (height, width, num_pca_out))
 
         # concatinate the feature windows
-        if len(x_npca) == 0:
+        if x_npca.size == 0:
             z = x_proj_pca
         else:
             z = np.concatenate((x_npca, x_proj_pca), axis = 2)
