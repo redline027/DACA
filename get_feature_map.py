@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import h5py
+import im2c
 
 def get_feature_map(im_patch, features, w2c):
 
@@ -9,8 +10,8 @@ def get_feature_map(im_patch, features, w2c):
     # Extracts the given features from the image patch. w2c is the
     # Color Names matrix, if used.
 
-    if nargin < 3:
-        w2c = []
+    #if nargin < 3:
+    #    w2c = []
 
     # the names of the features that can be used
     valid_features = ['gray', 'cn']
@@ -66,7 +67,10 @@ def get_feature_map(im_patch, features, w2c):
                 w2c = arrays['w2crs']
             
             # extract color descriptor
-            #out(:,:,level+(1:10)) = im2c(single(im_patch), w2c, -2);
-            #level = level + feature_levels(2);
+            # check !!!!!!
+            out_tmp = im2c(im_patch.astype(float), w2c, -2)
+            level_tmp = level + np.arange(10)
+            out[:, :, level_tmp] = out_tmp
+            level = level + feature_levels[1]
 
     return out

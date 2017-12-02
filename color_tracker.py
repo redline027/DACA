@@ -5,6 +5,7 @@ import cv2
 import time
 import feature_projection
 import get_subwindow
+import dense_gauss_kernel
 
 def color_tracker(params):
 
@@ -95,11 +96,13 @@ def color_tracker(params):
             xo_npca, xo_pca = get_subwindow.get_subwindow(im, pos, sz, non_compressed_features, compressed_features, w2c)
 
             # do the dimensionality reduction and windowing
-            #x = feature_projection(xo_npca, xo_pca, projection_matrix, cos_window);
+            x = feature_projection.feature_projection(xo_npca, xo_pca, projection_matrix, cos_window)
 
             # calculate the response of the classifier
-            #kf = fft2(dense_gauss_kernel(sigma, x, zp));
-            #response = real(ifft2(alphaf_num .* kf ./ alphaf_den));
+            kf = dense_gauss_kernel.dense_gauss_kernel(sigma, x, zp)
+            kf = np.fft.fft2(kf)
+            response = np.fft.ifft2(alphaf_num * kf / alphaf_den)
+            response = np.real(response)
 
             # target location is at the maximum response
             #[row, col] = find(response == max(response(:)), 1);

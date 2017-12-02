@@ -19,7 +19,7 @@ def feature_projection(x_npca, x_pca, projection_matrix, cos_window):
         # project the PCA-features using the projection matrix and reshape
         # to a window
         x_proj_pca = np.dot(x_pca, projection_matrix)
-        x_proj_pca = np.resize(x_proj_pca, (height, width, num_pca_out))
+        x_proj_pca = np.reshape(x_proj_pca, (height, width, num_pca_out))
 
         # concatinate the feature windows
         if x_npca.size == 0:

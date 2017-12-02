@@ -36,13 +36,11 @@ def get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c):
     else:
         out_npca = []
 
-    out_pca = {}
-    return out_npca, out_pca
-"""
     # compute pca feature map
-    if ~isempty(pca_features):
+    if pca_features.size != 0:
         temp_pca = get_feature_map.get_feature_map(im_patch, pca_features, w2c)
-        out_pca = reshape(temp_pca, [prod(sz), size(temp_pca, 3)])
+        out_pca = temp_pca.reshape((np.prod(sz), temp_pca.shape[2]))
     else:
         out_pca = []
-"""
+
+    return out_npca, out_pca
