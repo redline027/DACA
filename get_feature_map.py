@@ -3,6 +3,10 @@ import cv2
 import h5py
 import im2c
 
+
+def rgb2gray(rgb):
+    return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
+
 def get_feature_map(im_patch, features, w2c):
 
     # out = get_feature_map(im_patch, features, w2c)
@@ -28,17 +32,17 @@ def get_feature_map(im_patch, features, w2c):
     for i in range(num_valid_features):
         cmprd = np.zeros((len(features)), dtype=bool)
         for j in range(len(features)):
-            cmprd[i] = (valid_features[i].lower() == features[i].lower())
+            cmprd[j] = (valid_features[i].lower() == features[j].lower())
         used_features[i] = any(cmprd)
-
 
     # total number of used feature levels
     num_feature_levels = sum(feature_levels * used_features)
+    num_feature_levels = num_feature_levels[0]
 
     level = 0
 
     # If grayscale image
-    if im_patch.shape[2] == 1:
+    if len(im_patch.shape) == 2:
         # Features that are available for grayscale sequances
         
         # Grayscale values (image intensity)
@@ -51,26 +55,32 @@ def get_feature_map(im_patch, features, w2c):
         
         # Grayscale values (image intensity)
         if used_features[0]:
-            cv2.cvtColor(im_patch, im_patch_gray, cv2.COLOR_RGB2GRAY)
-            #level+1???? !!!!!!!!!!!
+            im_patch_gray = rgb2gray(im_patch)
+            for i in range(im_patch_gray.shape[0]):
+                for j in range(im_patch_gray.shape[1]):
+                    im_patch_gray[i][j] = round(im_patch_gray[i][j])
+
             out[:,:,level] = im_patch_gray.astype(float) / 255 - 0.5;
-            level = level + feature_levels[0]
-        
+            level = level + feature_levels[0][0]
+
         # Color Names
         if used_features[1]:
-            if w2c.size == 0:
+            # !!! TODO: need diferent check
+            if w2c.shape == 0:
                 # load the RGB to color name matrix if not in input
                 arrays = {}
                 f = h5py.File('w2crs.mat')
                 for k, v in f.items():
                     arrays[k] = np.array(v)
                 w2c = arrays['w2crs']
-            
+                w2c = w2c.T
+
             # extract color descriptor
-            # check !!!!!!
-            out_tmp = im2c(im_patch.astype(float), w2c, -2)
+            out_tmp = im2c.im2c(im_patch.astype(float), w2c, -2)
+
             level_tmp = level + np.arange(10)
             out[:, :, level_tmp] = out_tmp
+
             level = level + feature_levels[1]
 
     return out

@@ -32,7 +32,7 @@ params = Params()
 
 video = choose_video.choose_video(base_path)
 if video == '':
-     sys.exit() #user cancelled
+     exit() #user cancelled
 
 img_files, pos, target_sz, ground_truth, video_path = load_video_info.load_video_info(base_path, video)
 

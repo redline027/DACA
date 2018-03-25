@@ -19,7 +19,7 @@ def feature_projection(x_npca, x_pca, projection_matrix, cos_window):
         # project the PCA-features using the projection matrix and reshape
         # to a window
         x_proj_pca = np.dot(x_pca, projection_matrix)
-        x_proj_pca = np.reshape(x_proj_pca, (height, width, num_pca_out))
+        x_proj_pca = np.reshape(x_proj_pca, (height, width, num_pca_out), order='F')
 
         # concatinate the feature windows
         if x_npca.size == 0:
@@ -28,6 +28,11 @@ def feature_projection(x_npca, x_pca, projection_matrix, cos_window):
             z = np.concatenate((x_npca, x_proj_pca), axis = 2)
 
     # do the windowing of the output
-    z = cos_window * z
+    for i in range(z.shape[2]):
+        z[:,:,i] = cos_window * z[:,:,i]
+
+    #like in matlab
+    # TODO:REMOVE
+    z = np.around(z,decimals=4)
 
     return z

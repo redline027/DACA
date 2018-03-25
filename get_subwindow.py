@@ -27,19 +27,25 @@ def get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c):
     xs[xs > im.shape[1]] = im.shape[1]
     ys[ys > im.shape[0]] = im.shape[0]
 
+    ys_ind = ys.astype('int')
+    xs_ind = xs.astype('int')
+    xs_ind = xs_ind - 1
+    ys_ind = ys_ind - 1
     #extract image
-    im_patch = im[ys, xs, :]
+    #im_patch = im[ys_ind, xs_ind, :]
 
+    im_patch = im[ys_ind, :, :]
+    im_patch = im_patch[:, xs_ind, :]
     # compute non-pca feature map
-    if non_pca_features.size != 0:
+    if non_pca_features != '':
         out_npca = get_feature_map.get_feature_map(im_patch, non_pca_features, w2c)
     else:
         out_npca = []
 
     # compute pca feature map
-    if pca_features.size != 0:
+    if pca_features != '':
         temp_pca = get_feature_map.get_feature_map(im_patch, pca_features, w2c)
-        out_pca = temp_pca.reshape((np.prod(sz), temp_pca.shape[2]))
+        out_pca = temp_pca.reshape((int(np.prod(sz)), temp_pca.shape[2]), order='F')
     else:
         out_pca = []
 
