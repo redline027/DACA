@@ -243,6 +243,5 @@ def color_tracker(params):
                 cv2.waitKey(1)
 
     fps = num_frames / time_fps
-    print(fps)
 
     return positions, fps

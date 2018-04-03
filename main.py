@@ -2,6 +2,7 @@ import numpy as np
 import choose_video
 import load_video_info
 import color_tracker
+import cpm
 import math
 
 base_path = 'sequences/'
@@ -47,4 +48,6 @@ params.video_path = video_path
 
 positions, fps = color_tracker.color_tracker(params)
 
-print('Hi')
+distance_precision, pascal_precision, average_center_location_error = cpm.compute_performance_measures(positions, ground_truth, None, None)
+
+print('Center Location Error: %.3g pixels\nDistance Precision: %.3g %%\nOverlap Precision: %.3g %%\nSpeed: %.3g fps\n' % (average_center_location_error, 100*distance_precision, 100*pascal_precision, fps))
