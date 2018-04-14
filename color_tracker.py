@@ -240,10 +240,7 @@ def color_tracker(params):
                 cv2.rectangle(img, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (200, 0, 0), 2)
                 #cv2.destroyAllWindows()
                 cv2.imshow('Frames', im_open_cv)
-                if frame == 0:
-                    cv2.waitKey()
-                else:
-                    cv2.waitKey(1)
+                cv2.waitKey(1)
 
     fps = num_frames / time_fps
 
