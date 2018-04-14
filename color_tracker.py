@@ -89,7 +89,7 @@ def color_tracker(params):
     #num_frames instead 1
     for frame in range(num_frames):
         # load image
-        im_open_cv = cv2.imread('%s%s' % (video_path, img_files[frame]))
+        im_open_cv = cv2.imread('%s/%s' % (video_path, img_files[frame]))
         im = np.zeros(im_open_cv.shape)
 
         im[:,:,0] = im_open_cv[:,:,2]
@@ -240,7 +240,10 @@ def color_tracker(params):
                 cv2.rectangle(img, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (200, 0, 0), 2)
                 #cv2.destroyAllWindows()
                 cv2.imshow('Frames', im_open_cv)
-                cv2.waitKey(1)
+                if frame == 0:
+                    cv2.waitKey()
+                else:
+                    cv2.waitKey(1)
 
     fps = num_frames / time_fps
 

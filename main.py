@@ -10,7 +10,7 @@ base_path = 'sequences/'
 #parameters according to the paper
 class Params:
     # extra area surrounding the target
-    padding = 1.0
+    padding = 1
     # spatial bandwidth (proportional to target)
     output_sigma_factor = 1.0/16
     # gaussian kernel bandwidth
