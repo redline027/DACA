@@ -95,4 +95,4 @@ def load_video_info(base_path, video):
         for i in range(frames[0], frames[1] + 1):
             img_files.append('%08d.jpg' % i)
 
-    return img_files, pos, target_sz, ground_truth, video_path
+    return img_files, pos, target_sz, ground_truth, video_path, dirname

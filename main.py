@@ -35,7 +35,26 @@ video = choose_video.choose_video(base_path)
 if video == '':
      exit() #user cancelled
 
-img_files, pos, target_sz, ground_truth, video_path = load_video_info.load_video_info(base_path, video)
+img_files, pos, target_sz, ground_truth, video_path, dirname = load_video_info.load_video_info(base_path, video)
+
+f_out = open(dirname + '/params.txt', 'w')
+f_out.write('padding ' + str(params.padding) + '\n')
+f_out.write('output_sigma_factor ' + str(params.output_sigma_factor) + '\n')
+f_out.write('sigma ' + str(params.sigma) + '\n')
+f_out.write('lmbda ' + str(params.lmbda) + '\n')
+f_out.write('learning_rate ' + str(params.learning_rate) + '\n')
+f_out.write('compression_learning_rate ' + str(params.compression_learning_rate) + '\n')
+f_out.write('non_compressed_features ')
+for i in range(len(params.non_compressed_features)):
+    f_out.write(params.non_compressed_features[i])
+f_out.write('\n')
+f_out.write('compressed_features ')
+for i in range(len(params.compressed_features)):
+    f_out.write(params.compressed_features[i])
+f_out.write('\n')
+f_out.write('num_compressed_dim ' + str(params.num_compressed_dim) + '\n')
+f_out.write('visualization ' + str(params.visualization) + '\n')
+f_out.close()
 
 params.init_pos = np.zeros(2)
 for i in range(2):
@@ -48,6 +67,6 @@ params.video_path = video_path
 
 positions, fps = color_tracker.color_tracker(params)
 
-distance_precision, pascal_precision, average_center_location_error = cpm.compute_performance_measures(positions, ground_truth, None, None)
+distance_precision, pascal_precision, average_center_location_error = cpm.compute_performance_measures(positions, ground_truth, None, None, dirname)
 
 print('Center Location Error: %.3g pixels\nDistance Precision: %.3g %%\nOverlap Precision: %.3g %%\nSpeed: %.3g fps\n' % (average_center_location_error, 100*distance_precision, 100*pascal_precision, fps))

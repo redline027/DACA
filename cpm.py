@@ -1,6 +1,6 @@
 import numpy as np
 
-def compute_performance_measures(positions, ground_truth, distance_precision_threshold, pascal_threshold):
+def compute_performance_measures(positions, ground_truth, distance_precision_threshold, pascal_threshold, dirname):
 
     # [distance_precision, PASCAL_precision, average_center_location_error] = ...
     #    compute_performance_measures(positions, ground_truth, distance_precision_threshold, PASCAL_threshold)
@@ -84,5 +84,17 @@ def compute_performance_measures(positions, ground_truth, distance_precision_thr
 
     # calculate PASCAL precision
     pascal_precision = np.count_nonzero(overlaps >= pascal_threshold) / overlaps.size
+
+    f_out = open(dirname + '/distances.txt', 'w')
+    for i in range(distances.size):
+        f_out.write(str(distances[i]) + '\n')
+
+    f_out.close()
+
+    f_out = open(dirname + '/overlaps.txt', 'w')
+    for i in range(overlaps.size):
+        f_out.write(str(overlaps[i]) + '\n')
+
+    f_out.close()
 
     return distance_precision, pascal_precision, average_center_location_error
