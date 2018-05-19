@@ -7,6 +7,7 @@ import feature_projection
 import get_subwindow
 import dense_gauss_kernel
 from PIL import Image
+import os
 
 def color_tracker(params):
 
@@ -33,6 +34,9 @@ def color_tracker(params):
         target_sz[i] = math.floor(params.wsize[i])
 
     visualization = params.visualization
+
+    if not os.path.exists(video_path + '/new_images'):
+        os.makedirs(video_path + '/new_images')
 
     num_frames = len(img_files)
 
@@ -241,6 +245,7 @@ def color_tracker(params):
                 #cv2.destroyAllWindows()
                 cv2.imshow('Frames', im_open_cv)
                 cv2.waitKey(1)
+                cv2.imwrite('%s/new_images/%s' % (video_path, img_files[frame]), im_open_cv)
 
     fps = num_frames / time_fps
 
